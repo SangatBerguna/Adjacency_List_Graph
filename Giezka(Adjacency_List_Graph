@@ -1,0 +1,65 @@
+#include <iostream>
+#include <list>
+#include <vector>
+#include <cstdlib>  // Untuk fungsi rand() dan srand()
+#include <ctime>    // Untuk fungsi time()
+
+class Graf {
+    int jumlahNode;
+    std::vector<std::list<int>> daftarTetangga;
+
+public:
+    // Konstruktor
+    Graf(int banyakNode);
+
+    // Fungsi untuk menambahkan sisi ke dalam graf
+    void tambahSisi(int asalNode, int tujuanNode);
+
+    // Fungsi untuk mencetak graf
+    void cetakGraf();
+};
+
+// Konstruktor: inisialisasi graf dengan jumlah node yang diberikan
+Graf::Graf(int banyakNode) {
+    jumlahNode = banyakNode;
+    daftarTetangga.resize(banyakNode);
+}
+
+// Fungsi untuk menambahkan sisi ke dalam graf
+void Graf::tambahSisi(int asalNode, int tujuanNode) {
+    daftarTetangga[asalNode].push_back(tujuanNode);
+    daftarTetangga[tujuanNode].push_back(asalNode);  // Uncomment baris ini jika graf tidak berarah
+}
+
+// Fungsi untuk mencetak graf
+void Graf::cetakGraf() {
+    for (int i = 0; i < jumlahNode; ++i) {
+        std::cout << "Node " << i << ":";
+        for (int tetanggaNode : daftarTetangga[i]) {
+            std::cout << " -> " << tetanggaNode;
+        }
+        std::cout << std::endl;
+    }
+}
+
+int main() {
+    // Inisialisasi seed untuk random number generator
+    srand(time(0));
+
+    // Membuat graf dengan 5 node
+    Graf graf(5);
+
+    // Menambahkan sisi ke dalam graf secara acak
+    for (int i = 0; i < 7; ++i) {
+        int asal = rand() % 5;
+        int tujuan = rand() % 5;
+        if (asal != tujuan) {
+            graf.tambahSisi(asal, tujuan);
+        }
+    }
+
+    // Mencetak representasi daftar adjacency dari graf
+    graf.cetakGraf();
+
+    return 0;
+}
